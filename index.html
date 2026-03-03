@@ -11,9 +11,6 @@
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
     
     <style>
-        /* ==============================
-           CSS RESET & BASE STYLES
-           ============================== */
         * {
             margin: 0;
             padding: 0;
@@ -42,9 +39,6 @@
             overflow: hidden;
         }
 
-        /* ==============================
-           LOGIN SCREEN STYLES
-           ============================== */
         #login-screen {
             display: flex;
             flex-direction: column;
@@ -104,11 +98,6 @@
             box-shadow: 0 10px 30px rgba(0, 212, 170, 0.2);
         }
 
-        .google-btn svg {
-            width: 24px;
-            height: 24px;
-        }
-
         .loading-spinner {
             display: none;
             width: 40px;
@@ -124,16 +113,12 @@
             to { transform: rotate(360deg); }
         }
 
-        /* ==============================
-           CHAT SCREEN STYLES
-           ============================== */
         #chat-screen {
             display: none;
             height: 100vh;
             flex-direction: column;
         }
 
-        /* Header Styles */
         .chat-header {
             display: flex;
             justify-content: space-between;
@@ -142,6 +127,8 @@
             background: var(--bg-secondary);
             border-bottom: 1px solid var(--border-color);
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
         .header-left {
@@ -200,7 +187,6 @@
             color: white;
         }
 
-        /* Main Chat Area */
         .chat-main {
             flex: 1;
             display: flex;
@@ -208,13 +194,68 @@
             overflow: hidden;
         }
 
+        /* Search Section */
+        .search-section {
+            display: flex;
+            gap: 10px;
+            padding: 1rem 1.5rem;
+            background: var(--bg-tertiary);
+            border-bottom: 1px solid var(--border-color);
+            align-items: center;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 10px 15px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            outline: none;
+        }
+
+        .search-input:focus {
+            border-color: var(--accent-primary);
+        }
+
+        .search-btn {
+            padding: 10px 20px;
+            background: var(--accent-primary);
+            color: var(--bg-primary);
+            border: none;
+            border-radius: 20px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .search-btn:hover {
+            background: var(--accent-secondary);
+        }
+
+        .random-btn {
+            padding: 10px 15px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .random-btn:hover {
+            border-color: var(--accent-primary);
+        }
+
         /* Chat Partner Bar */
         .chat-partner-bar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1rem 1.5rem;
-            background: var(--bg-tertiary);
+            padding: 0.8rem 1.5rem;
+            background: var(--bg-secondary);
             border-bottom: 1px solid var(--border-color);
         }
 
@@ -257,7 +298,6 @@
             50% { opacity: 0.5; }
         }
 
-        /* Messages Container */
         .messages-container {
             flex: 1;
             overflow-y: auto;
@@ -281,11 +321,6 @@
             border-radius: 3px;
         }
 
-        .messages-container::-webkit-scrollbar-thumb:hover {
-            background: var(--text-muted);
-        }
-
-        /* Message Bubbles */
         .message-wrapper {
             display: flex;
             width: 100%;
@@ -336,7 +371,6 @@
             color: var(--text-muted);
         }
 
-        /* Empty State */
         .empty-chat {
             display: flex;
             flex-direction: column;
@@ -354,7 +388,6 @@
             opacity: 0.5;
         }
 
-        /* Waiting State */
         .waiting-banner {
             display: none;
             align-items: center;
@@ -371,7 +404,6 @@
             display: flex;
         }
 
-        /* Input Area */
         .input-container {
             display: flex;
             gap: 12px;
@@ -416,7 +448,7 @@
             flex-shrink: 0;
         }
 
-        .send-btn:hover {
+        .send-btn:hover:not(:disabled) {
             background: var(--accent-secondary);
             transform: scale(1.05);
         }
@@ -436,7 +468,6 @@
             height: 24px;
         }
 
-        /* System Messages */
         .system-message {
             text-align: center;
             padding: 8px 16px;
@@ -445,7 +476,16 @@
             font-style: italic;
         }
 
-        /* Responsive Design */
+        .error-message {
+            text-align: center;
+            padding: 8px;
+            color: var(--error-color);
+            font-size: 0.85rem;
+            background: rgba(255, 71, 87, 0.1);
+            border-radius: 8px;
+            margin: 0 1.5rem;
+        }
+
         @media (max-width: 768px) {
             .chat-header {
                 padding: 0.8rem 1rem;
@@ -460,13 +500,9 @@
                 font-size: 0.8rem;
             }
 
-            .user-id-value {
-                font-size: 0.9rem;
-            }
-
-            .logout-btn {
-                padding: 6px 12px;
-                font-size: 0.75rem;
+            .search-section {
+                padding: 0.8rem 1rem;
+                flex-wrap: wrap;
             }
 
             .messages-container {
@@ -475,19 +511,9 @@
 
             .message-bubble {
                 max-width: 85%;
-                padding: 10px 14px;
-            }
-
-            .input-container {
-                padding: 0.8rem 1rem;
-            }
-
-            .message-input {
-                padding: 12px 16px;
             }
         }
 
-        /* Animations */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
@@ -497,7 +523,6 @@
             animation: fadeIn 0.3s ease;
         }
 
-        /* Loading Overlay */
         .loading-overlay {
             display: none;
             position: fixed;
@@ -535,10 +560,10 @@
     <div id="login-screen">
         <div class="login-container">
             <h1 class="app-title">Deshi Chat</h1>
-            <p class="app-subtitle">Connect with strangers instantly</p>
+            <p class="app-subtitle">Connect with friends instantly</p>
             <div id="login-spinner" class="loading-spinner"></div>
             <button id="google-login-btn" class="google-btn">
-                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="24" height="24">
                     <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
                     <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
                     <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
@@ -567,13 +592,29 @@
 
         <!-- Main Chat Area -->
         <main class="chat-main">
+            <!-- Search Section -->
+            <div class="search-section">
+                <input 
+                    type="text" 
+                    id="search-input" 
+                    class="search-input" 
+                    placeholder="Enter friend's 4-digit ID (e.g., 1234)" 
+                    maxlength="4"
+                >
+                <button id="search-btn" class="search-btn">Search & Chat</button>
+                <button id="random-btn" class="random-btn">🎲 Random</button>
+            </div>
+
+            <!-- Error Message -->
+            <div id="error-message" class="error-message" style="display: none;"></div>
+
             <!-- Partner Info Bar -->
             <div class="chat-partner-bar">
                 <div class="partner-info">
-                    <span class="partner-label">Chat Now –</span>
+                    <span class="partner-label">Chatting with:</span>
                     <span id="partner-id" class="partner-id">----</span>
                 </div>
-                <div class="online-status">
+                <div class="online-status" id="partner-status" style="display: none;">
                     <span class="status-dot"></span>
                     <span>Online</span>
                 </div>
@@ -582,15 +623,15 @@
             <!-- Waiting Banner -->
             <div id="waiting-banner" class="waiting-banner">
                 <span>⏳</span>
-                <span>Waiting for users to come online...</span>
+                <span>Enter a friend ID or click Random to start chatting</span>
             </div>
 
             <!-- Messages Container -->
             <div id="messages-container" class="messages-container">
                 <div class="empty-chat">
                     <div class="empty-icon">💬</div>
-                    <p>Start chatting with your partner!</p>
-                    <p style="font-size: 0.85rem; margin-top: 0.5rem;">Messages are end-to-end ephemeral</p>
+                    <p>Search for a friend using their 4-digit ID</p>
+                    <p style="font-size: 0.85rem; margin-top: 0.5rem;">Or click Random to chat with someone online</p>
                 </div>
             </div>
 
@@ -603,8 +644,9 @@
                     placeholder="Type your message..." 
                     maxlength="500"
                     autocomplete="off"
+                    disabled
                 >
-                <button id="send-btn" class="send-btn">
+                <button id="send-btn" class="send-btn" disabled>
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
                     </svg>
@@ -634,7 +676,7 @@
         const db = firebase.firestore();
 
         // ==============================
-        // 🌐 GLOBAL STATE MANAGEMENT
+        // 🌐 GLOBAL STATE
         // ==============================
 
         const state = {
@@ -648,28 +690,20 @@
         };
 
         // ==============================
-        // 🔐 AUTHENTICATION FUNCTIONS
+        // 🔐 AUTHENTICATION
         // ==============================
 
-        /**
-         * Initialize authentication state listener
-         */
         function initAuth() {
             auth.onAuthStateChanged(async (user) => {
                 if (user) {
-                    // User is signed in
                     state.currentUser = user;
                     await handleUserLogin(user);
                 } else {
-                    // User is signed out
                     showLoginScreen();
                 }
             });
         }
 
-        /**
-         * Handle Google Sign-In
-         */
         async function signInWithGoogle() {
             const provider = new firebase.auth.GoogleAuthProvider();
             try {
@@ -682,56 +716,40 @@
             }
         }
 
-        /**
-         * Handle user login - generate ID and setup user document
-         */
         async function handleUserLogin(user) {
             try {
                 showLoadingOverlay(true);
                 
-                // Check if user already has a Deshi ID
                 const userDoc = await db.collection('users').doc(user.uid).get();
                 
                 if (userDoc.exists) {
-                    // Existing user
                     state.userId = userDoc.data().userId;
                     await updateUserOnlineStatus(true);
                 } else {
-                    // New user - generate unique 4-digit ID
                     state.userId = await generateUniqueUserId();
                     await createUserDocument(user, state.userId);
                 }
                 
-                // Update UI
                 document.getElementById('current-user-id').textContent = state.userId;
-                
-                // Show chat screen
                 showChatScreen();
-                
-                // Find chat partner
-                await findChatPartner();
+                showWaitingState(true);
                 
             } catch (error) {
                 console.error("Error in handleUserLogin:", error);
-                alert("Error setting up user: " + error.message);
+                alert("Error: " + error.message);
                 await logout();
             } finally {
                 showLoadingOverlay(false);
             }
         }
 
-        /**
-         * Generate unique 4-digit numeric ID (1000-9999)
-         */
         async function generateUniqueUserId() {
             let attempts = 0;
             const maxAttempts = 100;
             
             while (attempts < maxAttempts) {
-                // Generate random 4-digit number
                 const candidateId = Math.floor(1000 + Math.random() * 9000).toString();
                 
-                // Check if ID already exists
                 const existingUser = await db.collection('users')
                     .where('userId', '==', candidateId)
                     .get();
@@ -746,9 +764,6 @@
             throw new Error("Could not generate unique user ID");
         }
 
-        /**
-         * Create new user document in Firestore
-         */
         async function createUserDocument(user, userId) {
             const userData = {
                 userId: userId,
@@ -763,37 +778,22 @@
             await db.collection('users').doc(user.uid).set(userData);
         }
 
-        /**
-         * Update user's online status
-         */
         async function updateUserOnlineStatus(isOnline) {
             if (!state.currentUser) return;
             
-            const updateData = {
+            await db.collection('users').doc(state.currentUser.uid).update({
                 online: isOnline,
                 lastSeen: firebase.firestore.FieldValue.serverTimestamp()
-            };
-            
-            await db.collection('users').doc(state.currentUser.uid).update(updateData);
+            });
         }
 
-        /**
-         * Logout user
-         */
         async function logout() {
             try {
                 showLoadingOverlay(true);
-                
-                // Cleanup chat first
                 cleanupChat();
-                
-                // Set offline status
                 await updateUserOnlineStatus(false);
-                
-                // Sign out from Firebase
                 await auth.signOut();
                 
-                // Reset state
                 state.currentUser = null;
                 state.userId = null;
                 state.partnerId = null;
@@ -807,82 +807,132 @@
         }
 
         // ==============================
-        // 💬 CHAT FUNCTIONS
+        // 🔍 SEARCH & CHAT FUNCTIONS
         // ==============================
 
         /**
-         * Find an available chat partner
+         * Search for user by ID and start chat
          */
-        async function findChatPartner() {
+        async function searchAndChat() {
+            const searchInput = document.getElementById('search-input');
+            const targetId = searchInput.value.trim();
+            
+            hideError();
+            
+            // Validation
+            if (!targetId) {
+                showError("Please enter a 4-digit ID");
+                return;
+            }
+            
+            if (!/^\d{4}$/.test(targetId)) {
+                showError("ID must be exactly 4 digits (e.g., 1234)");
+                return;
+            }
+            
+            if (targetId === state.userId) {
+                showError("You cannot chat with yourself!");
+                return;
+            }
+            
             try {
-                // Listen for online users in real-time
-                const usersQuery = db.collection('users')
-                    .where('online', '==', true)
-                    .where('userId', '!=', state.userId);
+                showLoadingOverlay(true);
                 
-                // Set up real-time listener for available users
-                state.partnerListener = usersQuery.onSnapshot((snapshot) => {
-                    const onlineUsers = [];
-                    snapshot.forEach(doc => {
-                        const userData = doc.data();
-                        onlineUsers.push(userData.userId);
-                    });
-                    
-                    if (onlineUsers.length === 0) {
-                        // No users available
-                        showWaitingState(true);
-                        state.partnerId = null;
-                        state.roomId = null;
-                        clearMessages();
-                    } else {
-                        // Select random partner if not already chatting or partner went offline
-                        if (!state.partnerId || !onlineUsers.includes(state.partnerId)) {
-                            const randomPartner = onlineUsers[Math.floor(Math.random() * onlineUsers.length)];
-                            setupChatRoom(randomPartner);
-                        }
-                    }
-                }, (error) => {
-                    console.error("Error listening for users:", error);
-                });
+                // Find user with this ID
+                const userQuery = await db.collection('users')
+                    .where('userId', '==', targetId)
+                    .get();
+                
+                if (userQuery.empty) {
+                    showError(`User ${targetId} not found. Make sure they are registered.`);
+                    showLoadingOverlay(false);
+                    return;
+                }
+                
+                const userData = userQuery.docs[0].data();
+                
+                // Setup chat with this user
+                setupChatRoom(targetId);
+                searchInput.value = '';
                 
             } catch (error) {
-                console.error("Error finding partner:", error);
-                showWaitingState(true);
+                console.error("Search error:", error);
+                showError("Error searching for user");
+            } finally {
+                showLoadingOverlay(false);
             }
         }
 
         /**
-         * Setup chat room with partner
+         * Find random online user
          */
+        async function findRandomPartner() {
+            hideError();
+            
+            try {
+                showLoadingOverlay(true);
+                
+                const usersQuery = await db.collection('users')
+                    .where('online', '==', true)
+                    .where('userId', '!=', state.userId)
+                    .get();
+                
+                if (usersQuery.empty) {
+                    showError("No users online right now. Try again later!");
+                    showLoadingOverlay(false);
+                    return;
+                }
+                
+                const onlineUsers = [];
+                usersQuery.forEach(doc => {
+                    onlineUsers.push(doc.data().userId);
+                });
+                
+                const randomPartner = onlineUsers[Math.floor(Math.random() * onlineUsers.length)];
+                setupChatRoom(randomPartner);
+                
+            } catch (error) {
+                console.error("Random search error:", error);
+                showError("Error finding random user");
+            } finally {
+                showLoadingOverlay(false);
+            }
+        }
+
         function setupChatRoom(partnerId) {
-            // Cleanup previous chat if exists
+            // Cleanup previous chat
             cleanupChatRoom();
             
             state.partnerId = partnerId;
             state.roomId = generateRoomId(state.userId, partnerId);
+            state.isChatActive = true;
             
             // Update UI
             document.getElementById('partner-id').textContent = partnerId;
+            document.getElementById('partner-status').style.display = 'flex';
             showWaitingState(false);
-            state.isChatActive = true;
+            
+            // Enable inputs
+            document.getElementById('message-input').disabled = false;
+            document.getElementById('send-btn').disabled = false;
             
             // Clear and load messages
             clearMessages();
             listenForMessages();
+            
+            // Add system message
+            addSystemMessage(`You are now chatting with ${partnerId}`);
         }
 
-        /**
-         * Generate consistent room ID from two user IDs
-         */
         function generateRoomId(userId1, userId2) {
-            // Sort numerically to ensure consistency
             const sorted = [userId1, userId2].sort((a, b) => parseInt(a) - parseInt(b));
             return `room_${sorted[0]}_${sorted[1]}`;
         }
 
-        /**
-         * Listen for real-time messages
-         */
+        // ==============================
+        // 💬 MESSAGING
+        // ==============================
+
         function listenForMessages() {
             if (!state.roomId) return;
             
@@ -898,24 +948,22 @@
                         displayMessage(messageData);
                     }
                 });
-                
-                // Auto-scroll to bottom
                 scrollToBottom();
             }, (error) => {
-                console.error("Error listening to messages:", error);
+                console.error("Messages error:", error);
             });
         }
 
-        /**
-         * Send a message
-         */
         async function sendMessage() {
             const input = document.getElementById('message-input');
             const messageText = input.value.trim();
             
-            if (!messageText || !state.roomId || !state.partnerId) return;
+            if (!messageText || !state.roomId || !state.partnerId) {
+                console.log("Cannot send:", { messageText, roomId: state.roomId, partnerId: state.partnerId });
+                return;
+            }
             
-            // Clear input immediately for better UX
+            // Clear input immediately
             input.value = '';
             
             const messageData = {
@@ -925,13 +973,15 @@
             };
             
             try {
+                console.log("Sending message:", messageData);
                 await db.collection('chats')
                     .doc(state.roomId)
                     .collection('messages')
                     .add(messageData);
+                console.log("Message sent successfully");
             } catch (error) {
-                console.error("Error sending message:", error);
-                alert("Failed to send message. Please try again.");
+                console.error("Send error:", error);
+                showError("Failed to send message: " + error.message);
             }
         }
 
@@ -939,17 +989,12 @@
         // 🎨 UI FUNCTIONS
         // ==============================
 
-        /**
-         * Display a message in the chat
-         */
         function displayMessage(messageData) {
             const container = document.getElementById('messages-container');
             
-            // Remove empty state if exists
+            // Remove empty state
             const emptyState = container.querySelector('.empty-chat');
-            if (emptyState) {
-                emptyState.remove();
-            }
+            if (emptyState) emptyState.remove();
             
             const isOwnMessage = messageData.senderId === state.userId;
             const wrapper = document.createElement('div');
@@ -971,11 +1016,19 @@
             container.appendChild(wrapper);
         }
 
-        /**
-         * Format Firestore timestamp to HH:MM
-         */
+        function addSystemMessage(text) {
+            const container = document.getElementById('messages-container');
+            const emptyState = container.querySelector('.empty-chat');
+            if (emptyState) emptyState.remove();
+            
+            const div = document.createElement('div');
+            div.className = 'system-message';
+            div.textContent = text;
+            container.appendChild(div);
+        }
+
         function formatTimestamp(timestamp) {
-            if (!timestamp) return '';
+            if (!timestamp) return 'sending...';
             
             let date;
             if (timestamp.toDate) {
@@ -993,92 +1046,66 @@
             });
         }
 
-        /**
-         * Clear all messages from container
-         */
         function clearMessages() {
             const container = document.getElementById('messages-container');
             container.innerHTML = `
                 <div class="empty-chat">
                     <div class="empty-icon">💬</div>
-                    <p>Start chatting with your partner!</p>
-                    <p style="font-size: 0.85rem; margin-top: 0.5rem;">Messages are end-to-end ephemeral</p>
+                    <p>No messages yet</p>
+                    <p style="font-size: 0.85rem; margin-top: 0.5rem;">Say hello to start the conversation!</p>
                 </div>
             `;
         }
 
-        /**
-         * Scroll messages to bottom
-         */
         function scrollToBottom() {
             const container = document.getElementById('messages-container');
             container.scrollTop = container.scrollHeight;
         }
 
-        /**
-         * Show/hide waiting state
-         */
+        function showError(msg) {
+            const errorDiv = document.getElementById('error-message');
+            errorDiv.textContent = msg;
+            errorDiv.style.display = 'block';
+            setTimeout(hideError, 5000);
+        }
+
+        function hideError() {
+            document.getElementById('error-message').style.display = 'none';
+        }
+
         function showWaitingState(show) {
             const banner = document.getElementById('waiting-banner');
-            const partnerId = document.getElementById('partner-id');
-            
             if (show) {
                 banner.classList.add('show');
-                partnerId.textContent = '----';
-                state.isChatActive = false;
+                document.getElementById('partner-id').textContent = '----';
+                document.getElementById('partner-status').style.display = 'none';
+                document.getElementById('message-input').disabled = true;
+                document.getElementById('send-btn').disabled = true;
             } else {
                 banner.classList.remove('show');
             }
         }
 
-        /**
-         * Show login screen
-         */
         function showLoginScreen() {
             document.getElementById('login-screen').style.display = 'flex';
             document.getElementById('chat-screen').style.display = 'none';
             showLoginLoading(false);
         }
 
-        /**
-         * Show chat screen
-         */
         function showChatScreen() {
             document.getElementById('login-screen').style.display = 'none';
             document.getElementById('chat-screen').style.display = 'flex';
         }
 
-        /**
-         * Show/hide login loading spinner
-         */
         function showLoginLoading(show) {
-            const spinner = document.getElementById('login-spinner');
-            const btn = document.getElementById('google-login-btn');
-            
-            if (show) {
-                spinner.style.display = 'block';
-                btn.style.display = 'none';
-            } else {
-                spinner.style.display = 'none';
-                btn.style.display = 'flex';
-            }
+            document.getElementById('login-spinner').style.display = show ? 'block' : 'none';
+            document.getElementById('google-login-btn').style.display = show ? 'none' : 'flex';
         }
 
-        /**
-         * Show/hide full screen loading overlay
-         */
         function showLoadingOverlay(show) {
-            const overlay = document.getElementById('loading-overlay');
-            if (show) {
-                overlay.classList.add('show');
-            } else {
-                overlay.classList.remove('show');
-            }
+            document.getElementById('loading-overlay').classList.toggle('show', show);
         }
 
-        /**
-         * Cleanup chat room listeners
-         */
         function cleanupChatRoom() {
             if (state.messagesListener) {
                 state.messagesListener();
@@ -1086,17 +1113,8 @@
             }
         }
 
-        /**
-         * Full cleanup on logout
-         */
         function cleanupChat() {
             cleanupChatRoom();
-            
-            if (state.partnerListener) {
-                state.partnerListener();
-                state.partnerListener = null;
-            }
-            
             state.isChatActive = false;
             state.partnerId = null;
             state.roomId = null;
@@ -1106,16 +1124,12 @@
         // 🚀 EVENT LISTENERS
         // ==============================
 
-        // Login button
         document.getElementById('google-login-btn').addEventListener('click', signInWithGoogle);
-
-        // Logout button
         document.getElementById('logout-btn').addEventListener('click', logout);
-
-        // Send button
         document.getElementById('send-btn').addEventListener('click', sendMessage);
+        document.getElementById('search-btn').addEventListener('click', searchAndChat);
+        document.getElementById('random-btn').addEventListener('click', findRandomPartner);
 
-        // Enter key to send
         document.getElementById('message-input').addEventListener('keypress', (e) => {
             if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
@@ -1123,29 +1137,22 @@
             }
         });
 
-        // Handle window close/refresh - set offline
-        window.addEventListener('beforeunload', async () => {
-            if (state.currentUser) {
-                // Use sendBeacon for reliable delivery on page close
-                const data = JSON.stringify({ online: false, lastSeen: new Date().toISOString() });
-                navigator.sendBeacon = navigator.sendBeacon || function(){};
-                // Note: In production, you'd use a Cloud Function for reliable cleanup
-                await updateUserOnlineStatus(false);
+        document.getElementById('search-input').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                searchAndChat();
             }
         });
 
-        // Visibility change - update online status
-        document.addEventListener('visibilitychange', async () => {
+        window.addEventListener('beforeunload', () => {
             if (state.currentUser) {
-                await updateUserOnlineStatus(!document.hidden);
+                updateUserOnlineStatus(false);
             }
         });
 
         // ==============================
-        // 🏁 INITIALIZATION
+        // 🏁 START
         // ==============================
 
-        // Start the app
         initAuth();
     </script>
 </body>
